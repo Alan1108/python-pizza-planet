@@ -53,8 +53,8 @@ def test_calculate_order_price(app, ingredients, size, client_data):
                                                                        size])
     order = __order(created_ingredients, created_size, client_data)
     created_order, _ = OrderController.create(order)
-    pytest.assume(created_order['total_price'] == round(
-        sum(ingredient['price'] for ingredient in created_ingredients), 2))
+    pytest.assume(created_order['total_price'] == round(created_size['price'] +
+                                                        sum(ingredient['price'] for ingredient in created_ingredients), 2))
 
 
 def test_get_by_id(app, ingredients, size, client_data):
@@ -86,8 +86,7 @@ def test_get_all(app, ingredients, sizes, client_data):
         created_orders.append(created_order)
 
     orders_from_db, error = OrderController.get_all()
-    searchable_orders = {db_order['_id']
-        : db_order for db_order in orders_from_db}
+    searchable_orders = {db_order['_id']: db_order for db_order in orders_from_db}
     pytest.assume(error is None)
     for created_order in created_orders:
         current_id = created_order['_id']
