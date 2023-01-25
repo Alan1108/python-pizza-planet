@@ -40,7 +40,7 @@ python3 -m venv venv
 _For linux/MacOS users:_
 
 ```bash
-source venv/bin/activate 
+make venv-activate
 ```
 
 _For windows users:_
@@ -52,15 +52,13 @@ _For windows users:_
 - Install all necessary dependencies:
 
 ```bash
-pip3 install -r requirements.txt
+make install-requirements
 ```
 
 - Start the database (Only needed for the first run):
 
 ```bash
-python3 manage.py db init
-python3 manage.py db migrate
-python3 manage.py db upgrade
+make migrations
 ```
 
 - If you want to use the hot reload feature set FLASK_ENV before running the project:
@@ -68,7 +66,7 @@ python3 manage.py db upgrade
 _For linux/MacOS users:_
 
 ```bash
-export FLASK_ENV=development 
+export FLASK_ENV=development
 ```
 
 _For windows users:_
@@ -80,7 +78,7 @@ set FLASK_ENV=development
 - Run the project with:
 
 ```bash
-python3 manage.py run
+make run
 ```
 
 ## Running the frontend
@@ -110,5 +108,5 @@ ext install ritwickdey.LiveServer
 - Run the test command
 
 ```bash
-python3 manage.py test
+make tests
 ```
