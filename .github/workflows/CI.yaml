@@ -21,4 +21,4 @@ jobs:
         run: make install-requirements
 
       - name: Run tests
-        run: ls -a
+        run: make tests
