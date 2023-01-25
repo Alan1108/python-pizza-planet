@@ -14,4 +14,4 @@ run:
 	python3 manage.py run
 
 tests: 
-	python3 manage.py tests
+	python3 manage.py test
