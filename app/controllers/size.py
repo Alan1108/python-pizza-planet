@@ -1,6 +1,7 @@
 from ..repositories.managers import SizeManager
 from .base import BaseController
+from ..singleton import SingletonMeta
 
 
-class SizeController(BaseController):
+class SizeController(BaseController, metaclass=SingletonMeta):
     manager = SizeManager

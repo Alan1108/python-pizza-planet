@@ -1,10 +1,10 @@
 from typing import Tuple
 from sqlalchemy.exc import SQLAlchemyError
-
+from ..singleton import SingletonMeta
 from ..repositories.managers import IndexManager
 
 
-class IndexController:
+class IndexController(metaclass=SingletonMeta):
 
     @staticmethod
     def test_connection() -> Tuple[bool, str]:
