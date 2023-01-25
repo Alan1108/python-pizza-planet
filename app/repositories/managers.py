@@ -2,12 +2,14 @@ from typing import Any, List, Optional, Sequence
 
 from sqlalchemy.sql import text, column
 
+from app.singleton import SingletonMeta
+
 from .models import Ingredient, Order, IngredientsDetail, BeveragesDetail, Size, db, Beverage
 from .serializers import (IngredientSerializer, OrderSerializer,
                           SizeSerializer, BeverageSerializer, ma)
 
 
-class BaseManager:
+class BaseManager(metaclass=SingletonMeta):
     model: Optional[db.Model] = None
     serializer: Optional[ma.SQLAlchemyAutoSchema] = None
     session = db.session
@@ -39,12 +41,12 @@ class BaseManager:
         return cls.get_by_id(_id)
 
 
-class SizeManager(BaseManager):
+class SizeManager(BaseManager, metaclass=SingletonMeta):
     model = Size
     serializer = SizeSerializer
 
 
-class IngredientManager(BaseManager):
+class IngredientManager(BaseManager, metaclass=SingletonMeta):
     model = Ingredient
     serializer = IngredientSerializer
 
@@ -53,7 +55,7 @@ class IngredientManager(BaseManager):
         return cls.session.query(cls.model).filter(cls.model._id.in_(set(ids))).all() or []
 
 
-class OrderManager(BaseManager):
+class OrderManager(BaseManager, metaclass=SingletonMeta):
     model = Order
     serializer = OrderSerializer
 
@@ -75,14 +77,14 @@ class OrderManager(BaseManager):
         raise NotImplementedError(f'Method not suported for {cls.__name__}')
 
 
-class IndexManager(BaseManager):
+class IndexManager(BaseManager, metaclass=SingletonMeta):
 
     @ classmethod
     def test_connection(cls):
         cls.session.query(column('1')).from_statement(text('SELECT 1')).all()
 
 
-class BeverageManager(BaseManager):
+class BeverageManager(BaseManager, metaclass=SingletonMeta):
     model = Beverage
     serializer = BeverageSerializer
 
