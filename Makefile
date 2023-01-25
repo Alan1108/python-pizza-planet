@@ -2,7 +2,7 @@ SHELL=/bin/bash
 venv-activate:
 	source ./venv/bin/activate
 
-install-requirements: venv-activate
+install-requirements:
 	pip3 install -r requirements.txt
 
 migrations: install-requirements
