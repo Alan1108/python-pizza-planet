@@ -24,5 +24,6 @@ db_fill: db_drop
 	python3 manage.py seed run --root app/seeds 
 
 coverage_file:
-	pip install pytest-cov
-	pytest --cache-clear --cov=app ./app/test/ > pytest-coverage.txt
+	pip install pytest-coverage
+	pytest --cov-report xml:coverage.xml
+	coverage xml coverage.xml
