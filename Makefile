@@ -20,5 +20,5 @@ db_drop:
 	python3 manage.py db downgrade base
 	python3 manage.py db upgrade
 
-db_fill:
+db_fill: db_drop
 	python3 manage.py seed run --root app/seeds 

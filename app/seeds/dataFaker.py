@@ -9,22 +9,27 @@ from app.test.utils.functions import *
 def gen_random_clients():
     fake = fk()
     client_counter = randint(5, 15)
-    client_names = []
+    clients = []
     for i in range(client_counter):
-        client_names.append(fake.name())
-    return client_names
+        clients.append({
+            'name': fake.name(),
+            'dni': get_random_sequence(10),
+            'address': fake.address(),
+            'phone': fake.phone_number()
+        })
+    return clients
 
 
-def gen_fake_order(order_id, total_price, size_id, client_name):
+def gen_fake_order(order_id, total_price, size_id, client):
     fake = fk()
     return Faker(
         cls=Order,
         init={
             '_id': order_id,
-            'client_name': client_name,
-            'client_dni': get_random_sequence(10),
-            'client_address': fake.address(),
-            'client_phone': fake.phone_number(),
+            'client_name': client['name'],
+            'client_dni': client['dni'],
+            'client_address': client['address'],
+            'client_phone': client['phone'],
             'date': fake.date_between(datetime.fromisoformat('2020-01-01'), datetime.fromisoformat(datetime.now().date().isoformat())),
             'total_price': total_price,
             'size_id': size_id

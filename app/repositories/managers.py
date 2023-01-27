@@ -1,10 +1,12 @@
 from typing import Any, List, Optional, Sequence
+import calendar
 
-from sqlalchemy.sql import text, column
+from sqlalchemy.sql import text, column, func, desc, select
 
 from app.singleton import SingletonMeta
 
-from .models import Ingredient, Order, IngredientsDetail, BeveragesDetail, Size, db, Beverage
+from .models import (Ingredient, Order, IngredientsDetail,
+                     BeveragesDetail, Size, db, Beverage)
 from .serializers import (IngredientSerializer, OrderSerializer,
                           SizeSerializer, BeverageSerializer, ma)
 
@@ -91,3 +93,45 @@ class BeverageManager(BaseManager, metaclass=SingletonMeta):
     @ classmethod
     def get_by_id_list(cls, ids: Sequence):
         return cls.session.query(cls.model).filter(cls.model._id.in_(set(ids))).all() or []
+
+
+class ReportManager(BaseManager, metaclass=SingletonMeta):
+    session = db.session
+    needed_clients = 3
+
+    @ classmethod
+    def get_most_requested_ingredient(cls):
+        qry = cls.session.query(IngredientsDetail.ingredient_id, func.count(IngredientsDetail._id).label(
+            'qty')).group_by(IngredientsDetail.ingredient_id).order_by(desc('qty')).first()
+        complete_ingredient = Ingredient.query.get(qry.ingredient_id)
+        return({
+            'name': complete_ingredient.name,
+            'quantity': qry.qty
+        })
+
+    @ classmethod
+    def get_most_valuable_clients(cls):
+        clients = cls.session.query(Order.client_name, func.count(Order.client_name).label(
+            'qty')).group_by(Order.client_name).order_by(desc('qty')).limit(3).all()
+
+        print(clients)
+        return [{
+            "client_name": client.client_name
+        }
+            for client in clients
+        ]
+
+    @ classmethod
+    def get_month_with_most_revenue(cls):
+        month = cls.session.query(
+            func.strftime("%m", Order.date).label('month'),
+            func.sum(Order.total_price).label('total')).group_by('month').order_by(desc('total')).first()
+        return {'month_number': calendar.month_name[month[0]], 'total': month[1]}
+
+    @ classmethod
+    def get_report(cls):
+        return{
+            'most_requested_ingredient': cls.get_most_requested_ingredient(),
+            # 'month_with_most_revenue': cls.get_month_with_most_revenue(),
+            'most_valuable_clients': cls.get_most_valuable_clients()
+        }
