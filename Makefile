@@ -10,7 +10,7 @@ migrations: install-requirements
 	python3 manage.py db migrate
 	python3 manage.py db upgrade
 
-run: 
+run:
 	python3 manage.py run
 
 tests: 

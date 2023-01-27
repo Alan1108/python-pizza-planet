@@ -113,10 +113,8 @@ class ReportManager(BaseManager, metaclass=SingletonMeta):
     def get_most_valuable_clients(cls):
         clients = cls.session.query(Order.client_name, func.count(Order.client_name).label(
             'qty')).group_by(Order.client_name).order_by(desc('qty')).limit(3).all()
-
-        print(clients)
         return [{
-            "client_name": client.client_name
+            'client_name': client.client_name
         }
             for client in clients
         ]
@@ -124,14 +122,14 @@ class ReportManager(BaseManager, metaclass=SingletonMeta):
     @ classmethod
     def get_month_with_most_revenue(cls):
         month = cls.session.query(
-            func.strftime("%m", Order.date).label('month'),
+            func.strftime('%m', Order.date).label('month'),
             func.sum(Order.total_price).label('total')).group_by('month').order_by(desc('total')).first()
-        return {'month_number': calendar.month_name[month[0]], 'total': month[1]}
+        return {'month': calendar.month_name[int(month[0])], 'total': round(month[1], 2)}
 
     @ classmethod
     def get_report(cls):
         return{
             'most_requested_ingredient': cls.get_most_requested_ingredient(),
-            # 'month_with_most_revenue': cls.get_month_with_most_revenue(),
+            'month_with_most_revenue': cls.get_month_with_most_revenue(),
             'most_valuable_clients': cls.get_most_valuable_clients()
         }
