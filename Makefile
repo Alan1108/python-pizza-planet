@@ -22,3 +22,6 @@ db_drop:
 
 db_fill: db_drop
 	python3 manage.py seed run --root app/seeds 
+
+coverage_file:
+	pytest --cache-clear --cov=app ./app/test/ > pytest-coverage.txt

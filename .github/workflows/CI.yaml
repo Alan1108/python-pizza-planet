@@ -22,3 +22,9 @@ jobs:
 
       - name: Run tests
         run: make tests
+
+      - name: Build coverage file
+        run: make coverage_file
+
+      - name: Comment coverage
+        uses: coroo/pytest-coverage-commentator@v1.0.2
