@@ -98,12 +98,15 @@ class BeverageManager(BaseManager, metaclass=SingletonMeta):
 class ReportManager(BaseManager, metaclass=SingletonMeta):
     session = db.session
     needed_clients = 3
+    ingredient_detail = IngredientsDetail
+    ingredient = Ingredient
+    order = Order
 
     @ classmethod
     def get_most_requested_ingredient(cls):
-        qry = cls.session.query(IngredientsDetail.ingredient_id, func.count(IngredientsDetail._id).label(
-            'qty')).group_by(IngredientsDetail.ingredient_id).order_by(desc('qty')).first()
-        complete_ingredient = Ingredient.query.get(qry.ingredient_id)
+        qry = cls.session.query(cls.ingredient_detail.ingredient_id, func.count(cls.ingredient_detail._id).label(
+            'qty')).group_by(cls.ingredient_detail.ingredient_id).order_by(desc('qty')).first()
+        complete_ingredient = cls.ingredient.query.get(qry.ingredient_id)
         return({
             'name': complete_ingredient.name,
             'quantity': qry.qty
@@ -111,8 +114,8 @@ class ReportManager(BaseManager, metaclass=SingletonMeta):
 
     @ classmethod
     def get_most_valuable_clients(cls):
-        clients = cls.session.query(Order.client_name, func.count(Order.client_name).label(
-            'qty')).group_by(Order.client_name).order_by(desc('qty')).limit(3).all()
+        clients = cls.session.query(cls.order.client_name, func.count(cls.order.client_name).label(
+            'qty')).group_by(cls.order.client_name).order_by(desc('qty')).limit(3).all()
         return [{
             'client_name': client.client_name
         }
@@ -122,8 +125,8 @@ class ReportManager(BaseManager, metaclass=SingletonMeta):
     @ classmethod
     def get_month_with_most_revenue(cls):
         month = cls.session.query(
-            func.strftime('%m', Order.date).label('month'),
-            func.sum(Order.total_price).label('total')).group_by('month').order_by(desc('total')).first()
+            func.strftime('%m', cls.order.date).label('month'),
+            func.sum(cls.order.total_price).label('total')).group_by('month').order_by(desc('total')).first()
         return {'month': calendar.month_name[int(month[0])], 'total': round(month[1], 2)}
 
     @ classmethod
