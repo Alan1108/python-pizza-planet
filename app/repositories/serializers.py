@@ -1,5 +1,6 @@
 from app.plugins import ma
-from .models import Ingredient, Size, Order, IngredientsDetail, Beverage, BeveragesDetail
+from .models import (Ingredient, Size, Order,
+                     IngredientsDetail, Beverage, BeveragesDetail)
 
 
 class IngredientSerializer(ma.SQLAlchemyAutoSchema):

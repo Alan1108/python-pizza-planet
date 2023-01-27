@@ -22,3 +22,12 @@ jobs:
 
       - name: Run tests
         run: make tests
+
+      - name: Build coverage file
+        run: make coverage_file
+
+      - name: Get Cover
+        uses: orgoro/coverage@v3
+        with:
+          coverageFile: coverage.xml
+          token: ${{ secrets.SSH_TOKEN }}

@@ -101,6 +101,22 @@ ext install ritwickdey.LiveServer
 
 - **To avoid CORS errors** start the backend before the frontend, some browsers have CORS issues otherwise
 
+## Running the seeder
+
+- Fills the DB with random data
+
+```bash
+make db_fill
+```
+
+## Emptying the DB
+
+- Drops all the DB
+
+```bash
+make db_drop
+```
+
 ### Testing the backend
 
 - Make sure that you have `pytest` installed
