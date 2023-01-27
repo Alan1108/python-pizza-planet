@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 venv-activate:
-	source ./venv/bin/activate
+	source venv/bin/activate
 
 install-requirements:
 	pip3 install -r requirements.txt
@@ -25,5 +25,4 @@ db_fill: db_drop
 
 coverage_file:
 	pip install pytest-coverage
-	pytest --cov-report xml:coverage.xml
-	coverage xml coverage.xml
+	pytest --cov=app --cov-report xml 
