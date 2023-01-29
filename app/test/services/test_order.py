@@ -10,7 +10,7 @@ def test_get_order_by_id_service(client, order_uri, create_orders):
     pytest.assume(response.status.startswith('200'))
     returned_order = response.json
     for param, value in currentOrder.items():
-        pytest.assume(returned_order[param] == value)
+        pytest.assume(returned_order[0][param] == value)
 
 
 def test_get_orders_service(client, create_orders, order_uri):

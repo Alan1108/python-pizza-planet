@@ -29,7 +29,7 @@ def test_get_size_by_id_service(client, create_size, size_uri):
     pytest.assume(response.status.startswith('200'))
     returned_size = response.json
     for param, value in current_size.items():
-        pytest.assume(returned_size[param] == value)
+        pytest.assume(returned_size[0][param] == value)
 
 
 def test_get_size_service(client, create_sizes, size_uri):
